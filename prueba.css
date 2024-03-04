@@ -1,0 +1,32 @@
+.container {
+    text-align: center;
+    margin-top: 50px;
+    margin-left: 10%;
+    margin-right: 10%;
+}
+
+.SubContainer{
+    background-color: #000000;
+}
+
+body{
+    background-color: antiquewhite;
+}
+
+.drop-area {
+    border: 5px dashed #000000;
+    padding: 20px;
+    cursor: pointer;
+}
+
+.drop-area.highlight {
+    border-color: #ffffff;
+}
+
+.drop-area p {
+    margin: 0;
+}
+
+#fileInput {
+    display: none;
+}
