@@ -1,5 +1,6 @@
 import os
 
+
 # Directorio donde se encuentran los archivos
 directorio = 'datos'
 directorio_padre = os.path.dirname(directorio)
@@ -10,8 +11,9 @@ diccionario = []
 
 
 # Iterar sobre los archivos en el directorio
-for nombre_archivo in os.listdir(directorio):
+for nombre_archivo in os.listdir(os.listdir(directorio)):
     # Comprobar si el archivo es un archivo de texto
+
     if nombre_archivo.endswith('.txt'):
         # Construir la ruta completa al archivo
         ruta_archivo = os.path.join(directorio, nombre_archivo)
