@@ -3,6 +3,7 @@ import numpy as np
 import cv2
 import os
 
+#TODO cambiar a espectograma   
 
 # Mandar archivos para revisar la lista
 nombres_archivos = ["OpCode/goodware/IPv6addr.txt", "OpCode/goodware/vstp.txt", "OpCode/goodware/tickle_tcp.txt"]
@@ -28,44 +29,27 @@ for nombre_archivo in nombres_archivos:
             elementos =  contenido.strip().split(":")
             if len(elementos)> 1 :
                 codigo = elementos[1].strip()
-
-                # Crear una lista de valores numéricos correspondientes a las instrucciones
-                datos = [diccionario[instr] for instr in codigo.split()]
-
-                # Crear una matriz cuadrada a partir de los datos
-                lado_matriz = int(np.ceil(np.sqrt(len(datos))))
-                matriz = np.zeros((lado_matriz, lado_matriz))
-
-                # Llenar la matriz con los datos
-                for i, val in enumerate(datos):
-                    fila = i // lado_matriz
-                    columna = i % lado_matriz
-                    matriz[fila, columna] = val
+                
+                # Asignar a los strings en codigo sus respectivos valores del diccionario
+                codigo_con_valores = [str(diccionario.get(c, 0)) for c in codigo.split()]
+                print(codigo_con_valores)
+                # Convertir los datos a un array de tipo float
+                datos = np.array(codigo_con_valores, dtype=float)
 
                 # Aplicar la FFT a los datos
-                fft_resultado = np.fft.fft2(matriz)
-
-                print("\nResultado de la FFT:")
-                print(fft_resultado)
+                fft_resultado = np.fft.fft(datos)
 
                 # Calcular la magnitud del espectro de frecuencia
-                magnitud_espectro = np.fft.fftshift(np.abs(fft_resultado))
-
-                print(magnitud_espectro)
+                magnitud_espectro = np.abs(fft_resultado)
 
                 # Aplicar transformación logarítmica
                 magnitud_log = np.log1p(magnitud_espectro)
-
-                # Visualizar la magnitud logarítmica del espectro de frecuencia como una imagen
-                #reinicar plt
+                # Calcular el espectrograma del espectro de frecuencia
                 plt.clf()
-                #cambiar el CMAP para buscar uno que tenga mayor contraste ?
-                plt.imshow(magnitud_log, cmap='bone')
+                plt.specgram(magnitud_log, cmap='hot')
                 plt.colorbar()
-                plt.title('Magnitud logarítmica del espectro de frecuencia')
-                plt.xlabel('Frecuencia (Hz)')
-                plt.ylabel('Frecuencia (Hz)')
-                #TODO espectrograma
+                plt.title('Espectrograma del espectro de frecuencia')
+                plt.xlabel('Tiempo')
                 nombre_archivo = nombre_archivo.split("/")
                 nombre_archivo = nombre_archivo[2]
                 nombre_archivo = nombre_archivo.split(".")
