@@ -56,16 +56,16 @@ for nombre_archivo in nombres_archivos:
                 # Aplicar transformación logarítmica
                 magnitud_log = np.log1p(magnitud_espectro)
 
-                # Escalar linealmente los valores para ajustar el contraste
-                magnitud_log_normalizada = cv2.normalize(magnitud_log, None, 0, 255, cv2.NORM_MINMAX)
-
                 # Visualizar la magnitud logarítmica del espectro de frecuencia como una imagen
-                plt.imshow(magnitud_log_normalizada, cmap='viridis')
+                #reinicar plt
+                plt.clf()
+                #cambiar el CMAP para buscar uno que tenga mayor contraste ?
+                plt.imshow(magnitud_log, cmap='bone')
                 plt.colorbar()
                 plt.title('Magnitud logarítmica del espectro de frecuencia')
                 plt.xlabel('Frecuencia (Hz)')
                 plt.ylabel('Frecuencia (Hz)')
-                #TODO arreglar el tema del nombre
+                #TODO espectrograma
                 nombre_archivo = nombre_archivo.split("/")
                 nombre_archivo = nombre_archivo[2]
                 nombre_archivo = nombre_archivo.split(".")
