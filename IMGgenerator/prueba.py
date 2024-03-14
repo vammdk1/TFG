@@ -5,8 +5,9 @@ import os
 
 
 # Mandar archivos para revisar la lista
-nombres_archivos = ["datos//IPv6addr.txt", "datos/vstp.txt", "datos/tickle_tcp.txt"]
+nombres_archivos = ["OpCode/goodware/IPv6addr.txt", "OpCode/goodware/vstp.txt", "OpCode/goodware/tickle_tcp.txt"]
 ruta_diccionario = 'diccionario.txt'
+ruta_imagenes = 'img'
 diccionario = {}
 
 # Leer el diccionario desde el archivo
@@ -64,7 +65,12 @@ for nombre_archivo in nombres_archivos:
                 plt.title('Magnitud logarítmica del espectro de frecuencia')
                 plt.xlabel('Frecuencia (Hz)')
                 plt.ylabel('Frecuencia (Hz)')
-                plt.savefig(nombre_archivo+'imagen.png')
+                #TODO arreglar el tema del nombre
+                nombre_archivo = nombre_archivo.split("/")
+                nombre_archivo = nombre_archivo[2]
+                nombre_archivo = nombre_archivo.split(".")
+                nombre_archivo = nombre_archivo[0]
+                plt.savefig('img/'+nombre_archivo+'_imagen.png')
                 #plt.show()
 
     except FileNotFoundError:
