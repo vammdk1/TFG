@@ -10,6 +10,7 @@ ruta_diccionario = 'diccionario.txt'
 ruta_imagenes = 'img'
 diccionario = {}
 
+
 # Leer el diccionario desde el archivo
 with open(ruta_diccionario, 'r') as archivo_diccionario:
     for linea in archivo_diccionario:
@@ -20,7 +21,7 @@ with open(ruta_diccionario, 'r') as archivo_diccionario:
     #Sprint(diccionario)
         
 # Longitud objetivo común
-longitud_objetivo = 20000  # Por ejemplo, la longitud más corta entre todas las señales
+longitud_objetivo = 25000 
 
 # Normalizar la longitud de las señales
 def normalizar_longitud(datos, longitud_objetivo):
@@ -28,7 +29,6 @@ def normalizar_longitud(datos, longitud_objetivo):
         # Truncar las señales más largas
         datos_normalizados = datos[:longitud_objetivo]
     else:
-        # Rellenar las señales más cortas con ceros
         # Calcular cuántas veces es necesario leer la señal para alcanzar el tamaño deseado
         veces_a_leer = int(np.ceil(longitud_objetivo / len(datos)))
         # Volver a leer los valores de la señal original
@@ -53,9 +53,6 @@ for nombre_archivo in nombres_archivos:
                 # Normalizar la longitud de los datos
                 datos_normalizados = normalizar_longitud(np.array(codigo_con_valores, dtype=float), longitud_objetivo)
 
-                # Convertir los datos a un array de tipo float
-                #datos = np.array(datos_normalizados, dtype=float)
-
                 print(len(datos_normalizados))
 
                 # Aplicar la FFT a los datos
@@ -66,12 +63,15 @@ for nombre_archivo in nombres_archivos:
                 # Calcular el espectrograma
                 espectrograma = plt.specgram(fft_resultado, Fs=frecuencia_muestreo, cmap='viridis')
 
-                # Mostrar el espectrograma
-                
-                plt.xlabel('Tiempo [s]')
-                plt.ylabel('Frecuencia [Hz]')
-                plt.title('Espectrograma')
-                plt.colorbar(mappable=espectrograma[3]) 
+                valor_minimo_colorbar = 0  # Valor mínimo deseado en la barra de color (dB)
+                valor_maximo_colorbar = 100   # Valor máximo deseado en la barra de color (dB)
+                espectrograma[3].set_clim(valor_minimo_colorbar, valor_maximo_colorbar)
+                # Ocultar los números en los ejes x e y
+                plt.colorbar().remove()
+                plt.xticks([])
+                plt.yticks([])
+                #eliminar el margen
+                plt.tight_layout(pad=0)
                 nombre_archivo = nombre_archivo.split("/")
                 nombre_archivo = nombre_archivo[2]
                 nombre_archivo = nombre_archivo.split(".")
