@@ -2,10 +2,7 @@ import os
 
 
 # Directorio donde se encuentran los archivos
-
 directorio = 'OpCode'
-directorio_padre = os.path.dirname(directorio)
-
 # Lista para almacenar el contenido de los archivos
 contenido_archivos = []
 diccionario = []
