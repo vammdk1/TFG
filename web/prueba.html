@@ -5,6 +5,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>TFG</title>
+  <!-- Incluir la hoja de estilos de Dropzone -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.2/min/dropzone.min.css">
   <link rel="stylesheet" href="HTML/prueba.css">
 </head>
   <header>
@@ -12,16 +14,36 @@
      <!-- Herramienta de inteligencia artificial para detectar malware en imágenes  -->
      <p> Herramienta de inteligencia artificial para la detección de malware a través de  imágenes </p>
   </header>
-  <body>
-
+</head>
+<body>
     <div class="container">
-      <div class="contenedor1">
-          <main>
-            <h2>Sube o selecciona un elemento para analizar</h2>
-          <pre></pre>
-          </main>
-      </div>
-      <script src="HTML/DragDrop.js"></script>
+       <!-- Contenedor de Dropzone -->
+    <div id="dropzone" class="dropzone"></div>
+    <!-- Scripts -->
+    <!-- Incluir la biblioteca de Dropzone -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.2/min/dropzone.min.js"></script>
+    <!-- Inicializar Dropzone -->
+    <script>
+      // Configuración básica de Dropzone
+      Dropzone.autoDiscover = false; // Evitar que Dropzone se inicialice automáticamente
+  
+      // Inicializar Dropzone en el elemento con id "dropzone"
+      var myDropzone = new Dropzone("#dropzone", {
+        url: "/upload", // URL a la que se enviarán los archivos
+        maxFilesize: 1, // Tamaño máximo de archivo permitido en MB
+        acceptedFiles: ".txt", // Tipos de archivos permitidos
+        addRemoveLinks: true, // Mostrar enlaces para eliminar archivos
+        dictDefaultMessage: "Arrastra los archivos aquí o haz clic para subirlos", // Mensaje predeterminado
+        dictRemoveFile: "Eliminar archivo" // Texto para el enlace de eliminación de archivos
+      });
+  
+      // Evento que se ejecuta cuando se completa la carga de un archivo
+      myDropzone.on("complete", function(file) {
+        // Eliminar el archivo de la vista cuando se ha completado la carga
+        //myDropzone.removeFile(file);
+        //myDropzone.emit("success", file);
+      });
+    </script>
     </div>
 
     <footer>

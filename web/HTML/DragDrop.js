@@ -1,46 +1,62 @@
+var dropzone = new Dropzone('#demo-upload', {
+  previewTemplate: document.querySelector('#preview-template').innerHTML,
+  parallelUploads: 2,
+  thumbnailHeight: 120,
+  thumbnailWidth: 120,
+  maxFilesize: 3,
+  filesizeBase: 1000,
+  thumbnail: function(file, dataUrl) {
+    if (file.previewElement) {
+      file.previewElement.classList.remove("dz-file-preview");
+      var images = file.previewElement.querySelectorAll("[data-dz-thumbnail]");
+      for (var i = 0; i < images.length; i++) {
+        var thumbnailElement = images[i];
+        thumbnailElement.alt = file.name;
+        thumbnailElement.src = dataUrl;
+      }
+      setTimeout(function() { file.previewElement.classList.add("dz-image-preview"); }, 1);
+    }
+  }
 
-const supportsFileSystemAccessAPI =
-"getAsFileSystemHandle" in DataTransferItem.prototype;
-const supportsWebkitGetAsEntry =
-"webkitGetAsEntry" in DataTransferItem.prototype;
-
-const elem = document.querySelector("main");
-const debug = document.querySelector("pre");
-
-elem.addEventListener("dragover", (e) => {
-// Prevent navigation.
-e.preventDefault();
 });
 
-elem.addEventListener("dragenter", (e) => {
-elem.style.outline = "solid blue 1px";
-});
 
-elem.addEventListener("dragleave", (e) => {
-elem.style.outline = "";
-});
+// Now fake the file upload, since GitHub does not handle file uploads
+// and returns a 404
 
-elem.addEventListener("drop", async (e) => {
-e.preventDefault();
-elem.style.outline = "";
-const fileHandlesPromises = [...e.dataTransfer.items]
-  .filter((item) => item.kind === "file")
-  .map((item) =>
-    supportsFileSystemAccessAPI
-      ? item.getAsFileSystemHandle()
-      : supportsWebkitGetAsEntry
-      ? item.webkitGetAsEntry()
-      : item.getAsFile()
-  );
+var minSteps = 6,
+    maxSteps = 60,
+    timeBetweenSteps = 100,
+    bytesPerStep = 100000;
 
-for await (const handle of fileHandlesPromises) {
-  if (handle.kind === "directory" || handle.isDirectory) {
-    console.log(`Directory: ${handle.name}`);
-    debug.textContent += `Directory: ${handle.name}\n`;
-  } else {
-    console.log(`File: ${handle.name}`);
-    debug.textContent += `File: ${handle.name}\n`;
+dropzone.uploadFiles = function(files) {
+  var self = this;
+
+  for (var i = 0; i < files.length; i++) {
+
+    var file = files[i];
+    totalSteps = Math.round(Math.min(maxSteps, Math.max(minSteps, file.size / bytesPerStep)));
+
+    for (var step = 0; step < totalSteps; step++) {
+      var duration = timeBetweenSteps * (step + 1);
+      setTimeout(function(file, totalSteps, step) {
+        return function() {
+          file.upload = {
+            progress: 100 * (step + 1) / totalSteps,
+            total: file.size,
+            bytesSent: (step + 1) * file.size / totalSteps
+          };
+
+          self.emit('uploadprogress', file, file.upload.progress, file.upload.bytesSent);
+          if (file.upload.progress == 100) {
+            file.status = Dropzone.SUCCESS;
+            self.emit("success", file, 'success', null);
+            self.emit("complete", file);
+            self.processQueue();
+            //document.getElementsByClassName("dz-success-mark").style.opacity = "1";
+          }
+        };
+      }(file, totalSteps, step), duration);
+    }
   }
 }
-});
-      
