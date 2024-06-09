@@ -18,6 +18,7 @@
     <div class="container">
        <!-- Contenedor de Dropzone -->
     <div id="dropzone" class="dropzone"></div>
+    <ul id="predictionsList"></ul>
     <!-- Scripts -->
     <!-- Incluir la biblioteca de Dropzone -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.2/min/dropzone.min.js"></script>
@@ -38,31 +39,25 @@
   
       // Evento que se ejecuta cuando se completa la carga de un archivo
       myDropzone.on("complete", function(file) {
-        // Eliminar el archivo de la vista cuando se ha completado la carga
-        myDropzone.removeFile(file);
-        //myDropzone.emit("success", file);
-      });
-
-      
-      // Función para cargar el último mensaje desde la API
-      function cargarUltimoMensaje() {
-        fetch('/get_last_message')
-          .then(response => response.json())
-          .then(data => {
-            document.getElementById('last_message').textContent = data.message;
-          })
-          .catch(error => console.error('Error:', error));
-      }
-
-      // Llamar a la función de carga del último mensaje al cargar la página
-      cargarUltimoMensaje();
-
-      // Llamar a la función de carga del último mensaje cada 5 segundos
-      setInterval(cargarUltimoMensaje, 5000);
+    // Eliminar el archivo de la vista cuando se ha completado la carga
+    myDropzone.removeFile(file);
+    
+    // Hacer una solicitud AJAX para obtener la información de predicción
+    fetch('/predictions')
+    .then(response => response.json())
+    .then(data => {
+        // Procesar la información y mostrarla en una lista HTML
+        const predictionsList = document.getElementById('predictionsList');
+        predictionsList.innerHTML = ''; // Limpiar la lista antes de agregar nuevas predicciones
+        data.forEach(prediction => {
+            const listItem = document.createElement('li');
+            listItem.textContent = `Modelo: ${prediction.modelo}, Clase predicha: ${prediction.clase_predicha}, Probabilidad: ${prediction.probabilidad_predicha}`;
+            predictionsList.appendChild(listItem);
+        });
+    })
+    .catch(error => console.error('Error al obtener las predicciones:', error));
+});
     </script>
-    <div class="prueba">
-      <p id="last_message"></p>
-    </div>
     
     </div>
 
