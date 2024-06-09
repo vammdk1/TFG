@@ -112,9 +112,6 @@ def download_img():
     except FileNotFoundError:
         return {"error": "Imagen no encontrada"}
 
-if __name__ == "__main__":
-    app.run(debug=True)
-
 @app.route("/predictions", methods=["GET"])
 def get_predictions():
        # Ruta de la imagen generada
@@ -125,3 +122,7 @@ def get_predictions():
     resultados = predecir_con_modelos(modelos_cargados, imagen_array)
 
     return jsonify(resultados)
+
+if __name__ == "__main__":
+    app.run(debug=True)
+    #app.run(host="0.0.0.0", port=5000, debug=True)
