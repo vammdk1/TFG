@@ -5,65 +5,62 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>TFG</title>
-  <!-- Incluir la hoja de estilos de Dropzone -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.2/min/dropzone.min.css">
-  <link rel="stylesheet" href="/webPage/static/styles.css">
-  <header>
-    <h1>H.I.A.M.I</h1>
-     <!-- Herramienta de inteligencia artificial para detectar malware en imágenes  -->
-     <p> Herramienta de inteligencia artificial para la detección de malware a través de  imágenes </p>
-  </header>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.2/min/dropzone.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+<link rel="stylesheet" href="/webPage/static/styles.css">
+<header>
+  <h1>H.I.A.M.I</h1>
+  <p>Herramienta de inteligencia artificial para la detección de malware a través de imágenes</p>
+</header>
 </head>
 <body>
-    <div class="container">
-       <!-- Contenedor de Dropzone -->
+  <div class="container">
     <div id="dropzone" class="dropzone"></div>
-    <ul id="predictionsList"></ul>
-    <!-- Scripts -->
-    <!-- Incluir la biblioteca de Dropzone -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.2/min/dropzone.min.js"></script>
-    <!-- Inicializar Dropzone -->
-    <script>
-      // Configuración básica de Dropzone
-      Dropzone.autoDiscover = false; // Evitar que Dropzone se inicialice automáticamente
-  
-      // Inicializar Dropzone en el elemento con id "dropzone"
-      var myDropzone = new Dropzone("#dropzone", {
-        url: "/upload", // URL a la que se enviarán los archivos
-        maxFilesize: 1, // Tamaño máximo de archivo permitido en MB
-        acceptedFiles: ".txt", // Tipos de archivos permitidos
-        addRemoveLinks: true, // Mostrar enlaces para eliminar archivos
-        dictDefaultMessage: "Arrastra los archivos aquí o haz clic para subirlos", // Mensaje predeterminado
-        dictRemoveFile: "Eliminar archivo" // Texto para el enlace de eliminación de archivos
-      });
-  
-      // Evento que se ejecuta cuando se completa la carga de un archivo
-      myDropzone.on("complete", function(file) {
-    // Eliminar el archivo de la vista cuando se ha completado la carga
-    myDropzone.removeFile(file);
-    
-    // Hacer una solicitud AJAX para obtener la información de predicción
-    fetch('/predictions')
-    .then(response => response.json())
-    .then(data => {
-        // Procesar la información y mostrarla en una lista HTML
-        const predictionsList = document.getElementById('predictionsList');
-        predictionsList.innerHTML = ''; // Limpiar la lista antes de agregar nuevas predicciones
-        data.forEach(prediction => {
-            const listItem = document.createElement('li');
-            listItem.textContent = `Modelo: ${prediction.modelo}, Clase predicha: ${prediction.clase_predicha}, Probabilidad: ${prediction.probabilidad_predicha}`;
-            predictionsList.appendChild(listItem);
-        });
-    })
-    .catch(error => console.error('Error al obtener las predicciones:', error));
-});
-    </script>
-    
+    <div class="mensajes">
+      <ul id="predictionsList"></ul> <!-- Añade este elemento -->
     </div>
+  </div>
+  <footer>
+    <p>© 2024 Mi Página Similar a VirusTotal</p>
+  </footer>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.2/min/dropzone.min.js"></script>
+  <script>
+    Dropzone.autoDiscover = false;
+    var myDropzone = new Dropzone("#dropzone", {
+      url: "/upload",
+      maxFilesize: 1,
+      acceptedFiles: ".txt",
+      addRemoveLinks: true,
+      dictDefaultMessage: "Arrastra los archivos aquí o haz clic para subirlos",
+      dictRemoveFile: "Eliminar archivo"
+    });
 
-    <footer>
-      <p>© 2024 Mi Página Similar a VirusTotal</p>
-    </footer>
-    
-  </body>
+    myDropzone.on("success", function(file, response) {
+      // Eliminar el archivo de la vista cuando se ha completado la carga
+      myDropzone.removeFile(file);
+
+      // Procesar la información y mostrarla en una lista HTML
+      const predictionsList = document.getElementById('predictionsList');
+      predictionsList.innerHTML = ''; // Limpiar la lista antes de agregar nuevas predicciones
+
+      if (response.error) {
+        const listItem = document.createElement('li');
+        listItem.textContent = response.error;
+        predictionsList.appendChild(listItem);
+      } else {
+        response.forEach(prediction => {
+          if (prediction.clase_predicha==='goodware') {
+            const listItem = document.createElement('li');
+            listItem.textContent = `Modelo: ${prediction.modelo} Clase predicha: ${prediction.clase_predicha}, Probabilidad: ${prediction.probabilidad_predicha}` + '<i class="fas fa-check" style="color: green;"></i>';
+            predictionsList.appendChild(listItem);
+          } else {
+            const listItem = document.createElement('li');
+            listItem.textContent = `Modelo: ${prediction.modelo} Clase predicha: ${prediction.clase_predicha}, Probabilidad: ${prediction.probabilidad_predicha}`+ '<i class="fas fa-times" style="color: red;"></i>';
+            predictionsList.appendChild(listItem);
+          }
+        });
+      }
+    });
+  </script>
+</body>
 </html>

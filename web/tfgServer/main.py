@@ -69,15 +69,19 @@ def upload_file():
 
     #procesar imagen
     procesar(file.filename)
-
-    # Ruta de la imagen generada
     ruta_imagen = os.path.join(DOWNLOAD_FOLDER, "IMG.png")
+
+    # Verifica si la imagen generada existe
+    if not os.path.exists(ruta_imagen):
+        return jsonify({"error": "Imagen no encontrada"}), 404
 
     # Cargar la imagen generada y hacer predicciones
     imagen_array = cargar_imagen(ruta_imagen)
     resultados = predecir_con_modelos(modelos_cargados, imagen_array)
 
     return jsonify(resultados)
+
+ 
 
 def procesar(filename):
     script_file = os.path.join(base_dir, "imgGenerator", "imgTranslator.py")
@@ -111,9 +115,13 @@ def download_img():
 if __name__ == "__main__":
     app.run(debug=True)
 
-@app.route("/predictions")
+@app.route("/predictions", methods=["GET"])
 def get_predictions():
-    # Obtener la información de predicción
-    resultados = obtener_informacion_de_prediccion()
-    # Devolver la información como respuesta JSON
+       # Ruta de la imagen generada
+    ruta_imagen = os.path.join(DOWNLOAD_FOLDER, "IMG.png")
+
+    # Cargar la imagen generada y hacer predicciones
+    imagen_array = cargar_imagen(ruta_imagen)
+    resultados = predecir_con_modelos(modelos_cargados, imagen_array)
+
     return jsonify(resultados)
