@@ -21,7 +21,9 @@ header {
 }
 
 .mensajes{
-  text-align: center;
+  flex-wrap: wrap;
+  text-align: left;
+  max-width: 80%;
 }
 
 footer {

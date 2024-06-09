@@ -49,15 +49,19 @@
         predictionsList.appendChild(listItem);
       } else {
         response.forEach(prediction => {
-          if (prediction.clase_predicha==='goodware') {
-            const listItem = document.createElement('li');
-            listItem.textContent = `Modelo: ${prediction.modelo} Clase predicha: ${prediction.clase_predicha}, Probabilidad: ${prediction.probabilidad_predicha}` + '<i class="fas fa-check" style="color: green;"></i>';
-            predictionsList.appendChild(listItem);
+          const listItem = document.createElement('li');
+          const probabilidad = prediction.probabilidad_predicha.toFixed(2); 
+          //TODO arreglar longitud de los float y agregar simbolos de check y cross
+         // Seleccionar el ícono basado en la clase predicha
+         let icon;
+          if (prediction.clase_predicha === 'goodware') {
+            icon = '<i class="fas fa-check" style="color: green; margin-left: 10px;"></i>';
           } else {
-            const listItem = document.createElement('li');
-            listItem.textContent = `Modelo: ${prediction.modelo} Clase predicha: ${prediction.clase_predicha}, Probabilidad: ${prediction.probabilidad_predicha}`+ '<i class="fas fa-times" style="color: red;"></i>';
-            predictionsList.appendChild(listItem);
+            icon = '<i class="fas fa-times" style="color: red; margin-left: 10px;"></i>';
           }
+
+          listItem.innerHTML = `Modelo: ${prediction.modelo}, Clase predicha: ${prediction.clase_predicha}, Probabilidad: ${probabilidad} ${icon}`;
+          predictionsList.appendChild(listItem);
         });
       }
     });
