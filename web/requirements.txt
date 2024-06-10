@@ -1,2 +1,5 @@
-iniciar el servidor --> uvicorn main:app --host 0.0.0.0 --port 8080
-Conectar con visualstudio del servidor --> code tunnel
+matplotlib
+tensorflow
+numpy
+testresources
+pillow

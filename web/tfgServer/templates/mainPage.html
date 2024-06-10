@@ -60,7 +60,7 @@
             icon = '<i class="fas fa-times" style="color: red; margin-left: 10px;"></i>';
           }
 
-          listItem.innerHTML = `Modelo: ${prediction.modelo}, Clase predicha: ${prediction.clase_predicha}, Probabilidad: ${probabilidad} ${icon}`;
+          listItem.innerHTML = `Modelo: ${prediction.modelo.split('.')[0]}, Clase predicha: ${prediction.clase_predicha}, Probabilidad: ${probabilidad} ${icon}`;
           predictionsList.appendChild(listItem);
         });
       }
