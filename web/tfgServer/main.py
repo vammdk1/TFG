@@ -85,6 +85,7 @@ def upload_file():
 
 def procesar(filename):
     script_file = os.path.join(base_dir, "imgGenerator", "imgTranslator.py")
+    #Para linux se debe cambiar el comando a "python3.12"
     args = ["python", script_file, filename, DICTIONARY_FILE, UPLOAD_FOLDER, DOWNLOAD_FOLDER]
     subprocess.run(args)
 
