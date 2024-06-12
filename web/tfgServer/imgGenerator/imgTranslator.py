@@ -25,7 +25,7 @@ with open(elementos[2], 'r') as archivo_diccionario:
     #Sprint(diccionario)
         
 # Longitud objetivo común
-longitud_objetivo = 20000 
+longitud_objetivo = 200000 
 
 # Normalizar la longitud de las señales
 def normalizar_longitud(datos, longitud_objetivo):

@@ -22,7 +22,7 @@ classes = ['goodware', 'malware']
 
 # Función para cargar la imagen
 def cargar_imagen(ruta_imagen):
-    img = image.load_img(ruta_imagen, target_size=(640, 460))  # Ajustar tamaño según tu modelo
+    img = image.load_img(ruta_imagen, target_size=(640, 480))  # Ajustar tamaño según tu modelo
     imagen_array = image.img_to_array(img)
     imagen_array = np.expand_dims(imagen_array, axis=0)
     return imagen_array
