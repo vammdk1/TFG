@@ -48,12 +48,24 @@
         listItem.textContent = response.error;
         predictionsList.appendChild(listItem);
       } else {
+        // Ordenar las predicciones alfabéticamente por el nombre del modelo
+        response.sort((a, b) => {
+          let modelA = a.modelo.toUpperCase(); // Ignorar mayúsculas y minúsculas
+          let modelB = b.modelo.toUpperCase(); // Ignorar mayúsculas y minúsculas
+          if (modelA < modelB) {
+            return -1;
+          }
+          if (modelA > modelB) {
+            return 1;
+          }
+          return 0;
+        });
+
         response.forEach(prediction => {
           const listItem = document.createElement('li');
           const probabilidad = prediction.probabilidad_predicha.toFixed(2); 
-          //TODO arreglar longitud de los float y agregar simbolos de check y cross
-         // Seleccionar el ícono basado en la clase predicha
-         let icon;
+          // Seleccionar el ícono basado en la clase predicha
+          let icon;
           if (prediction.clase_predicha === 'goodware') {
             icon = '<i class="fas fa-check" style="color: green; margin-left: 10px;"></i>';
           } else {
