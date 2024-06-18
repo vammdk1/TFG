@@ -81,8 +81,6 @@ def upload_file():
 
     return jsonify(resultados)
 
- 
-
 def procesar(filename):
     script_file = os.path.join(base_dir, "imgGenerator", "imgTranslator.py")
     #Para linux se debe cambiar el comando a "python3.12"

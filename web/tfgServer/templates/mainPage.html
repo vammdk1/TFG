@@ -32,7 +32,8 @@
       acceptedFiles: ".txt",
       addRemoveLinks: true,
       dictDefaultMessage: "Arrastra los archivos aquí o haz clic para subirlos",
-      dictRemoveFile: "Eliminar archivo"
+      dictRemoveFile: "Eliminar archivo",
+      maxFiles: 1 // Limita a solo un archivo
     });
 
     myDropzone.on("success", function(file, response) {
